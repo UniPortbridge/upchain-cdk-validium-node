@@ -174,7 +174,7 @@ func (p *PostgresPoolStorage) GetNonWIPPendingTxs(ctx context.Context) ([]pool.T
 	)
 
 	sql = `SELECT encoded, status, received_at, is_wip, ip, cumulative_gas_used, used_keccak_hashes, used_poseidon_hashes, used_poseidon_paddings, used_mem_aligns,
-		used_arithmetics, used_binaries, used_steps, failed_reason FROM pool.transaction WHERE is_wip IS FALSE and status = $1`
+		used_arithmetics, used_binaries, used_steps, failed_reason FROM pool.transaction WHERE is_wip IS FALSE and status = $1 order by received_at asc limit 15`
 	rows, err = p.db.Query(ctx, sql, pool.TxStatusPending)
 
 	if err != nil {
